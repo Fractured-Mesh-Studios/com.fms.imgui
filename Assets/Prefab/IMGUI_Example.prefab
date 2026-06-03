@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4058206714534916838
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9217983360794068960}
+  - component: {fileID: -1673108897181819273}
+  - component: {fileID: 8504853077399774575}
+  - component: {fileID: 4256358137346495485}
+  m_Layer: 5
+  m_Name: IMGUI_Example
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9217983360794068960
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4058206714534916838}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-1673108897181819273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4058206714534916838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e22f98a036ff9d47bbf7fd684a39e3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: IMGUI::ConsoleEngine.Window
+  rect:
+    serializedVersion: 2
+    x: 50
+    y: 50
+    width: 400
+    height: 200
+  dragSize: {x: 400, y: 20}
+  title: Window
+  tooltip: 'Ingame Window [GUI]'
+  icon: {fileID: 2800000, guid: c5ad77db44727114eb45a598936a0bc0, type: 3}
+  resizeIcon: {fileID: 2800000, guid: 201acc778bcbc534fb5cb43afd03b852, type: 3}
+  drag: 1
+  resize: 1
+  clamp: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
+  opacity: 1
+  m_skin: {fileID: 0}
+--- !u!114 &8504853077399774575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4058206714534916838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f75fbb853861b64aa160fd600523ffb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: IMGUI::GuiEngine.ToggleWindow
+  OnToggle:
+    m_Name: On Toggle
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 70f833d1-200d-4eba-81d7-3d92c695f190
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 764bcb47-e7e5-4200-9a98-f619543196ec
+      m_Path: <Keyboard>/tab
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: On Toggle
+      m_Flags: 0
+    m_Flags: 0
+--- !u!114 &4256358137346495485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4058206714534916838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8830aba9702a88a48bc88bab578add0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: IMGUI::GuiEngine.WindowCloseButton
+  color: {r: 0.7735849, g: 0.25110805, b: 0.18609823, a: 1}
+  text: X
+  size: {x: 20, y: 10}
+  offset: {x: 7, y: 5}

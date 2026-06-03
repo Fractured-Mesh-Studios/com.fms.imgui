@@ -1,0 +1,21 @@
+{
+  "name": "com.fms.imgui",
+  "displayName": "IMGUI",
+  "version": "1.0.0",
+  "unity": "2019.4",
+  "description": "Author: Jorge Nahuel Gerones\nInGame Runtime IMGUI Console \n\nRuntime and editor custom scripts",
+  "keywords": [
+    "console",
+    "runtime",
+    "testing",
+    "imgui",
+    "plataform"
+  ],
+  "category": "ui",
+  "documentationUrl": "no url data",
+  "repository": {
+    "url": "--",
+    "type": "git",
+    "revision": ""
+  }
+}
