@@ -26,8 +26,6 @@ namespace GuiEngine
 
         public void OnWindowGUI(int id)
         {
-            DebugClient.Log($"[WindowCloseButton] OnWindowGUI {window.title}");
-
             GUI.color = color;
             if (GUI.Button(new Rect(window.width - size.x - offset.x, offset.y, size.x, size.y), text))
             {
