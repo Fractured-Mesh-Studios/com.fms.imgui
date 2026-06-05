@@ -65,7 +65,9 @@ namespace GuiEngine
         #region UNITY
         protected virtual void OnEnable()
         {
-            m_windowContent = new GUIContent(title, icon, tooltip);
+            m_windowContent = icon != null
+                ? new GUIContent(title, icon, tooltip)
+                : new GUIContent(title, null, tooltip);
 
             m_components = GetComponentsInChildren<IWindow>(true);
 
@@ -102,10 +104,12 @@ namespace GuiEngine
             GUI.skin = m_skin;
             m_event = Event.current;
 
-            if (m_mobile != null) { 
+            if (m_mobile != null)
+            { 
                 m_mobile.BeginMobile();
             }
 
+            var viewport = m_mobile != null ? m_mobile.GuiViewportRect : new Rect(0f, 0f, Screen.width, Screen.height);
             Vector2 resizeOffset = new Vector2(
                 rect.width - RESIZE_WIDTH,
                 rect.height - RESIZE_HEIGHT
@@ -158,8 +162,7 @@ namespace GuiEngine
 
                     if (clamp)
                     {
-                        rect.x = Mathf.Clamp(rect.x, 0, Screen.width - rect.width);
-                        rect.y = Mathf.Clamp(rect.y, 0, Screen.height - rect.height);
+                        ClampRectToViewport(viewport);
                     }
                 }
 
@@ -168,8 +171,13 @@ namespace GuiEngine
                     var w = m_mousePosition.x - rect.x;
                     var h = m_mousePosition.y - rect.y;
 
-                    rect.width = Mathf.Clamp(w, Screen.width * 0.1f, Screen.width);
-                    rect.height = Mathf.Clamp(h, Screen.height * 0.1f, Screen.height);
+                    rect.width = Mathf.Clamp(w, viewport.width * 0.1f, viewport.width);
+                    rect.height = Mathf.Clamp(h, viewport.height * 0.1f, viewport.height);
+
+                    if (clamp)
+                    {
+                        ClampRectToViewport(viewport);
+                    }
 
                     m_dragRect.width = rect.width;
                     m_dragRect.height = rect.height;
@@ -286,6 +294,14 @@ namespace GuiEngine
             PlayerPrefs.Save();
 
             m_lastSavedRect = rect;
+        }
+
+        private void ClampRectToViewport(Rect viewport)
+        {
+            rect.width = Mathf.Min(rect.width, viewport.width);
+            rect.height = Mathf.Min(rect.height, viewport.height);
+            rect.x = Mathf.Clamp(rect.x, viewport.xMin, viewport.xMax - rect.width);
+            rect.y = Mathf.Clamp(rect.y, viewport.yMin, viewport.yMax - rect.height);
         }
 
         private string GetPrefsKey()
