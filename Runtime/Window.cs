@@ -32,8 +32,14 @@ namespace GuiEngine
 
 
         private GUIContent m_windowContent;
+
+        private bool m_guiEnabled;
+
+        public void Enable() { m_guiEnabled = true; }
+
+        public void Disable() { m_guiEnabled = false; }
         
-        
+
         private Event m_event;
 
         private Vector2 m_mousePosition, m_mouseDragPosition;
@@ -73,6 +79,8 @@ namespace GuiEngine
 
             onOpen += OnOpenEvent;
             onClose += OnCloseEvent;
+
+            Enable();
         }
 
         protected virtual void OnDisable()
@@ -103,6 +111,8 @@ namespace GuiEngine
         #region GUI
         private void OnGUI()
         {
+            GUI.enabled = m_guiEnabled;
+
             GUI.skin = m_skin;
             m_event = Event.current;
 
@@ -123,8 +133,6 @@ namespace GuiEngine
                 m_mousePosition = Event.current.mousePosition;
                 m_dragRect = new Rect(rect.position, dragSize);
                 m_resizeRect = new Rect(rect.position + resizeOffset, new Vector2(RESIZE_WIDTH, RESIZE_HEIGHT));
-
-                DebugClient.Log("Show");
 
                 if(m_event.type == EventType.MouseDown && m_event.button == 0)
                 {
@@ -204,6 +212,8 @@ namespace GuiEngine
             {
                 m_mobile.EndMobile();
             }
+
+            GUI.enabled = true;
         }
         #endregion
 
