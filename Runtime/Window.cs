@@ -60,9 +60,12 @@ namespace GuiEngine
         #region UNITY
         protected virtual void Awake()
         {
-            if(m_windowId == 1)
+            var instanceId = GetInstanceID();
+            m_windowId = instanceId == int.MinValue ? int.MaxValue : Math.Abs(instanceId);
+
+            if (m_windowId == 0)
             {
-                m_windowId = UnityEngine.Random.Range(2, 100);
+                m_windowId = 1;
             }
         }
 
@@ -136,11 +139,13 @@ namespace GuiEngine
 
                 if(m_event.type == EventType.MouseDown && m_event.button == 0)
                 {
-                    //Resize
-                    m_canResize = m_resizeRect.Contains(m_mousePosition);
+                    bool isResizeHit = m_resizeRect.Contains(m_mousePosition);
+                    bool isDragHit = m_dragRect.Contains(m_mousePosition);
+                    bool isWindowHit = rect.Contains(m_mousePosition);
 
-                    //Drag
-                    if (m_dragRect.Contains(m_mousePosition))
+                    m_canResize = isResizeHit;
+
+                    if (isDragHit)
                     {
                         m_canDrag = true;
                         m_mouseDragPosition = m_mousePosition - rect.position;
@@ -150,7 +155,16 @@ namespace GuiEngine
                         m_canDrag = false;
                     }
 
-                    m_event.Use();
+                    if (isWindowHit)
+                    {
+                        GUI.BringWindowToFront(m_windowId);
+                        GUI.FocusWindow(m_windowId);
+                    }
+
+                    if (isDragHit || isResizeHit)
+                    {
+                        m_event.Use();
+                    }
                 }
 
                 if (m_event.type == EventType.MouseUp && m_event.button == 0)
@@ -264,6 +278,7 @@ namespace GuiEngine
                 PlayerPrefs.GetFloat(key + PREFS_KEY_SUFFIX_WIDTH, rect.width),
                 PlayerPrefs.GetFloat(key + PREFS_KEY_SUFFIX_HEIGHT, rect.height)
             );
+
         }
 
         private void SaveWindowState()
