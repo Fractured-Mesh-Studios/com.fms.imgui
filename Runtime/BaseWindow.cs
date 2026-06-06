@@ -18,7 +18,7 @@ namespace GuiEngine
         public Action<bool> onOpen;
         public Action<bool> onClose;
 
-        protected int m_windowId;
+        protected int m_windowId = 1;
         private bool m_isOpen;
         public bool isOpen => m_isOpen;
 

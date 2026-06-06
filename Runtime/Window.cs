@@ -1,3 +1,4 @@
+using LoggerEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -46,9 +47,23 @@ namespace GuiEngine
 
         private WindowMobile m_mobile;
 
+        private Rect m_viewport;
+
+        public bool isViewportOverlay => m_viewport.Contains(rect.min) && m_viewport.Contains(rect.max);
+
         #region UNITY
+        protected virtual void Awake()
+        {
+            if(m_windowId == 1)
+            {
+                m_windowId = UnityEngine.Random.Range(2, 100);
+            }
+        }
+
         protected virtual void OnEnable()
         {
+            m_windowContent = WindowContent();
+
             m_components = GetComponentsInChildren<IWindow>(true);
 
             m_mobile = GetComponent<WindowMobile>();
@@ -65,7 +80,7 @@ namespace GuiEngine
             SaveWindowState();
 
             m_windowContent = new GUIContent();
-            
+
             Close();
 
             m_components = null;
@@ -88,8 +103,6 @@ namespace GuiEngine
         #region GUI
         private void OnGUI()
         {
-            m_windowContent = WindowContent();
-
             GUI.skin = m_skin;
             m_event = Event.current;
 
@@ -99,6 +112,7 @@ namespace GuiEngine
             }
 
             var viewport = m_mobile != null ? m_mobile.GuiViewportRect : new Rect(0f, 0f, Screen.width, Screen.height);
+            m_viewport = viewport;
             Vector2 resizeOffset = new Vector2(
                 rect.width - RESIZE_WIDTH,
                 rect.height - RESIZE_HEIGHT
@@ -109,6 +123,8 @@ namespace GuiEngine
                 m_mousePosition = Event.current.mousePosition;
                 m_dragRect = new Rect(rect.position, dragSize);
                 m_resizeRect = new Rect(rect.position + resizeOffset, new Vector2(RESIZE_WIDTH, RESIZE_HEIGHT));
+
+                DebugClient.Log("Show");
 
                 if(m_event.type == EventType.MouseDown && m_event.button == 0)
                 {

@@ -69,6 +69,11 @@ namespace GuiEditor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("opacity"));
             });
 
+            if (!m_target.isViewportOverlay)
+            {
+                EditorGUILayout.HelpBox("Window is outside of viewport \nClear [PlayerPrefs]", MessageType.Warning);
+            }
+
             serializedObject.ApplyModifiedProperties();
         }
 
