@@ -2,6 +2,10 @@
 
 A lightweight Unity package for building draggable, resizable IMGUI-based windows with optional input toggling, persistence, mobile scaling, and reusable child window components.
 
+## Documentation
+
+- [`GUILayoutExtended` reference](./GUILayoutExtended.md)
+
 ## Namespace
 
 - Runtime: `GuiEngine`
