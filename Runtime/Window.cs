@@ -7,13 +7,8 @@ using UnityEngine.InputSystem;
 
 namespace GuiEngine
 {
-    public interface IWindow
-    {
-        void OnWindowGUI(int id);
-    }
-
     [ExecuteInEditMode]
-    public class Window : MonoBehaviour
+    public class Window : BaseWindow
     {
         private const float RESIZE_WIDTH = 20;
         private const float RESIZE_HEIGHT = 20;
@@ -22,12 +17,9 @@ namespace GuiEngine
         private const string PREFS_KEY_SUFFIX_WIDTH = ".width";
         private const string PREFS_KEY_SUFFIX_HEIGHT = ".height";
 
-        [HideInInspector] public Rect rect = new Rect(50, 50, 400, 200);
         [HideInInspector] public Vector2 dragSize = new Vector2(400, 20);
 
-        [HideInInspector] public string title = "Window";
-        [HideInInspector] public string tooltip = "Ingame Window";
-        [HideInInspector] public Texture icon = null;
+        
         [HideInInspector] public Texture resizeIcon = null;
         [HideInInspector] public bool drag, resize, clamp;
         [HideInInspector] public Color color = Color.white;
@@ -37,18 +29,10 @@ namespace GuiEngine
         [SerializeField, HideInInspector] private string m_playerPrefsKey = string.Empty;
         [SerializeField, HideInInspector] private bool m_persistLayout = true;
 
-        public Action<bool> onOpen;
-        public Action<bool> onClose;
-
-        public bool isOpen => m_isOpen;
-
-        public int width => (int)rect.width;
-
-        public int height => (int)rect.height;
 
         private GUIContent m_windowContent;
-        private int m_windowId;
-        private bool m_isOpen;
+        
+        
         private Event m_event;
 
         private Vector2 m_mousePosition, m_mouseDragPosition;
@@ -65,16 +49,15 @@ namespace GuiEngine
         #region UNITY
         protected virtual void OnEnable()
         {
-            m_windowContent = icon != null
-                ? new GUIContent(title, icon, tooltip)
-                : new GUIContent(title, null, tooltip);
-
             m_components = GetComponentsInChildren<IWindow>(true);
 
             m_mobile = GetComponent<WindowMobile>();
 
             LoadWindowState();
             m_lastSavedRect = rect;
+
+            onOpen += OnOpenEvent;
+            onClose += OnCloseEvent;
         }
 
         protected virtual void OnDisable()
@@ -82,9 +65,13 @@ namespace GuiEngine
             SaveWindowState();
 
             m_windowContent = new GUIContent();
-            m_isOpen = false;
+            
+            Close();
 
             m_components = null;
+
+            onOpen -= OnOpenEvent;
+            onClose -= OnCloseEvent;
         }
         #endregion
 
@@ -101,6 +88,8 @@ namespace GuiEngine
         #region GUI
         private void OnGUI()
         {
+            m_windowContent = WindowContent();
+
             GUI.skin = m_skin;
             m_event = Event.current;
 
@@ -115,7 +104,7 @@ namespace GuiEngine
                 rect.height - RESIZE_HEIGHT
             );
 
-            if(m_isOpen)
+            if(isOpen)
             {
                 m_mousePosition = Event.current.mousePosition;
                 m_dragRect = new Rect(rect.position, dragSize);
@@ -202,7 +191,7 @@ namespace GuiEngine
         }
         #endregion
 
-        #region WINDOW
+        #region EVENTS
         protected virtual void OnWindow(int id)
         {
             foreach(var component in m_components)
@@ -211,41 +200,19 @@ namespace GuiEngine
             }
         }
 
-        public void Open()
+        private void OnOpenEvent(bool isOpen)
         {
-            if (!m_isOpen)
+            if (isOpen)
             {
-                m_isOpen = true;
-                if (onOpen != null)
-                    onOpen.Invoke(m_isOpen);
+                LoadWindowState();
             }
         }
 
-        public void Close()
+        private void OnCloseEvent(bool isOpen)
         {
-            if (m_isOpen)
-            {
-                m_isOpen = false;
-                SaveWindowState();
-                if (onClose != null)
-                    onClose.Invoke(m_isOpen);
-            }
-        }
-
-        public void Toggle()
-        {
-            m_isOpen = !m_isOpen;
-            if (m_isOpen)
-            {
-                if (onOpen != null)
-                    onOpen.Invoke(m_isOpen);
-            }
-            else
+            if (!isOpen)
             {
                 SaveWindowState();
-
-                if (onClose != null)
-                    onClose.Invoke(m_isOpen);
             }
         }
         #endregion
