@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GuiEngine
 {
-    public class WindowCloseButton : MonoBehaviour, IWindow
+    public class WindowCloseButton : MonoBehaviour, IWindowModule
     {
         [Header("Appearance")]
         public Color color = Color.red;

@@ -33,13 +33,6 @@ namespace GuiEngine
 
         private GUIContent m_windowContent;
 
-        private bool m_guiEnabled;
-
-        public void Enable() { m_guiEnabled = true; }
-
-        public void Disable() { m_guiEnabled = false; }
-        
-
         private Event m_event;
 
         private Vector2 m_mousePosition, m_mouseDragPosition;
@@ -49,7 +42,7 @@ namespace GuiEngine
         private bool m_canResize = false;
         private Rect m_lastSavedRect;
 
-        private IWindow[] m_components;
+        private IWindowModule[] m_components;
 
         private WindowMobile m_mobile;
 
@@ -73,7 +66,7 @@ namespace GuiEngine
         {
             m_windowContent = WindowContent();
 
-            m_components = GetComponentsInChildren<IWindow>(true);
+            m_components = GetComponentsInChildren<IWindowModule>(true);
 
             m_mobile = GetComponent<WindowMobile>();
 
@@ -341,6 +334,14 @@ namespace GuiEngine
 
             return builder.ToString();
         }
+        #endregion
+
+        #region GUI_ENABLED
+        private bool m_guiEnabled;
+
+        public void Enable() { m_guiEnabled = true; }
+
+        public void Disable() { m_guiEnabled = false; }
         #endregion
     }
 }

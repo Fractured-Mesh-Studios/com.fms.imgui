@@ -1,3 +1,5 @@
+using Codice.CM.Common;
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,15 +13,15 @@ namespace GuiEngine
     ///   3. Llamar m_busy.OnGUI() dentro de OnGUI() del MonoBehaviour.
     ///   4. Envolver los controles interactivos con: if (!m_busy.IsBusy) { ... }
     /// </summary>
-    public class WindowOverlay : MonoBehaviour, IWindow
+    public class WindowTextOverlay : MonoBehaviour, IWindowModule
     {
-        private static readonly string[] Frames = { "◐", "◓", "◑", "◒" };
+        private static readonly string[] Frames = { ".  ", ".. ", "...", "....",".....", "   " };
         private const float FrameRate = 0.15f;
 
         public bool IsBusy { get{ return m_isBusy; } private set { m_isBusy = value; } }
         public string Label { get; private set; } = string.Empty;
 
-        [SerializeField] private bool m_isBusy;
+        private bool m_isBusy;
 
         [SerializeField][Range(0,1)]private float opacity = 0.4f;
 
@@ -131,9 +133,8 @@ namespace GuiEngine
 
             m_labelStyle.fontSize = fontSize;
             m_labelStyle.normal.textColor = m_textColor;
-
-            GUILayout.BeginArea(new Rect(window.width/4, window.height/4, window.width * 0.5f, window.height * 0.5f), GUI.skin.box);
             
+            GUILayout.BeginArea(new Rect(window.width/4, window.height/4, window.width * 0.5f, window.height * 0.5f), GUI.skin.box);
             GUILayout.BeginVertical();
             GUILayout.FlexibleSpace();
             GUILayout.Label(Frames[m_frame], m_spinnerStyle);
@@ -141,9 +142,10 @@ namespace GuiEngine
             GUILayout.Label(Label, m_labelStyle);
             GUILayout.FlexibleSpace();
             GUILayout.EndVertical();
-
             GUILayout.EndArea();
-
+            
         }
+
     }
+
 }

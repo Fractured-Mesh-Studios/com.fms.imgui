@@ -4,16 +4,16 @@ using GuiEngine;
 
 namespace GuiEditor
 {
-    [CustomEditor(typeof(WindowOverlay))]
+    [CustomEditor(typeof(WindowTextOverlay))]
     public class WindowOverlayEditor : Editor
     {
-        private WindowOverlay m_target;
+        private WindowTextOverlay m_target;
 
         private bool m_isActive;
 
         private void OnEnable()
         {
-            m_target = (WindowOverlay)target;
+            m_target = (WindowTextOverlay)target;
         }
 
         public override void OnInspectorGUI()

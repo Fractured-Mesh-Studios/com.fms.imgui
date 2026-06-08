@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GuiEngine
 {
-    public interface IWindow
+    public interface IWindowModule
     {
         void OnWindowGUI(int id);
     }
