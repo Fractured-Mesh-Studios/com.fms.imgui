@@ -2,35 +2,29 @@ using UnityEngine;
 
 namespace GuiEngine
 {
-    public class WindowTooltip : MonoBehaviour
+    public class GUILayoutToolip : MonoBehaviour
     {
-        public static string tooltip = "";
-
-        [SerializeField] private string laTooltip;
-
-        // Estilo personalizado para el Box del Tooltip (opcional)
         private GUIStyle tooltipStyle;
+
+        [RuntimeInitializeOnLoadMethod]
+        private static void OnLoad()
+        {
+            var obj = new GameObject("GUILayoutTooltip", typeof(GUILayoutToolip));
+        }
 
         private void OnGUI()
         {
-            // 1. Dibujamos los elementos de la interfaz normalmente
-            if (string.IsNullOrEmpty(tooltip))
-            {
-                return;
-            }
+            GUI.Window(int.MinValue, new Rect(0, 0, Screen.width, Screen.height), OnWindowGUI, string.Empty, GUIStyle.none);
+            GUI.BringWindowToFront(int.MinValue);
+        }
 
-            laTooltip = tooltip;
-
-            // 2. RENDER: Solo dibujamos en el evento 'Repaint' para evitar parpadeos
-            // y asegurarnos de que ya pasó por la lectura de todos los demás scripts.
+        private void OnWindowGUI(int id)
+        {
             if (Event.current.type == EventType.Repaint)
             {
-                if (!string.IsNullOrEmpty(tooltip))
+                if (!string.IsNullOrEmpty(GUI.tooltip))
                 {
-                    DrawTooltip(tooltip);
-
-                    // Limpiamos para el próximo frame. Si el mouse sigue ahí, 
-                    // el otro script lo volverá a llenar en el siguiente ciclo.
+                    DrawTooltip(GUI.tooltip);
                 }
             }
         }
@@ -69,8 +63,11 @@ namespace GuiEngine
             Rect rect = new Rect(xPos, yPos, size.x, size.y);
 
             // Forzamos a que se dibuje por encima de Absolutamente TODO
-            GUI.depth = -1000;
+            GUI.depth = int.MaxValue;
             GUI.Box(rect, content, tooltipStyle);
+
+            GUI.tooltip = string.Empty;
         }
     }
 }
+

@@ -107,6 +107,7 @@ namespace GuiEngine
         #region GUI
         private void OnGUI()
         {
+            GUI.tooltip = string.Empty;
             GUI.enabled = m_guiEnabled;
 
             GUI.skin = m_skin;
